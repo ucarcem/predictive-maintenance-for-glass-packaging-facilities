@@ -1,0 +1,203 @@
+# ==============================================================================
+# CAM AMBALAJ ÜRETİM HATTI GENEL VE EKİPMAN YAPILANDIRMASI (line_config.yaml)
+# ==============================================================================
+
+# --- HAT GENEL FİNANSAL VE OPERASYONEL PARAMETRELERİ ---
+line_settings:
+  line_stoppage_cost: 15000     # C_hat_durus: Günlük net üretim kaybı / ceza ($)
+  total_technicians: 100        # Fabrikada aynı anda çalışabilecek max bakım teknisyeni
+  planning_horizon_days: 28     # MILP optimizasyon kayan ufuk süresi (gün)
+  blackout_days_per_week: 2     # Her 7 günde bir rastgele konacak duruş yasağı gün sayısı
+
+# --- EKİPMAN ENVANTERİ VE SENSÖR PARAMETRELERİ ---
+# is_hot_section: true  -> Sıcak bölge (Duruş yaptığında TÜM hat durur, Z_k = 1 zorunlu)
+# is_hot_section: false -> Soğuk bölge (Tampon masaları sayesinde kısa duruşlar hattı kilitlemeyebilir)
+# workers_needed: W_i   -> Bu makinenin bakımında gereken teknisyen sayısı
+# lead_time_days: LT_i  -> Gerekli yedek parçanın ambara teslim süresi (gün)
+# cost_maint: C_bakim   -> Planlı parça + işçilik maliyeti ($)
+# cost_damage: C_hasar  -> Plansız arıza, kırık cam, ikincil hasar ve acil tamir maliyeti ($)
+
+equipments:
+  # ----------------------------------------------------------------------------
+  # 1. SICAK BÖLGE: IS MAKİNESİ VE MASA ÖNÜ TAHRİKLERİ
+  # ----------------------------------------------------------------------------
+  - id: "IS_MOLD_SET"
+    name: "IS Makinesi Kalıp ve Mekanizma Seti (24 Bölüm)"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 12
+    lead_time_days: 0
+    cost_maint: 1200
+    cost_damage: 18000
+
+  # IS İtici Servo Motorları (24 Eksen için Örnek Temsilciler)
+  - id: "IS_DRIVE_01"
+    name: "IS Bölüm 01 İtici Servo Motor"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 2
+    lead_time_days: 3
+    cost_maint: 800
+    cost_damage: 8000
+
+  - id: "IS_DRIVE_04"
+    name: "IS Bölüm 04 İtici Servo Motor"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 2
+    lead_time_days: 3
+    cost_maint: 800
+    cost_damage: 8000
+
+  - id: "IS_DRIVE_12"
+    name: "IS Bölüm 12 İtici Servo Motor"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 2
+    lead_time_days: 3
+    cost_maint: 800
+    cost_damage: 8000
+
+  - id: "CONV_HOT_FRONT"
+    name: "IS Makine Önü Sıcak Konveyör Motoru"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 3
+    lead_time_days: 1
+    cost_maint: 600
+    cost_damage: 12000
+
+  - id: "INSPECTION_XPAR"
+    name: "XPAR Sıcak Bölge Kamera"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 2
+    lead_time_days: 2
+    cost_maint: 1500
+    cost_damage: 9000
+
+  - id: "CONV_HOT_COAT"
+    name: "Sıcak Kaplama Konveyör Motoru"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 3
+    lead_time_days: 1
+    cost_maint: 600
+    cost_damage: 10000
+
+  - id: "CONV_CORNER_TRANS"
+    name: "Köşe Transfer Asenkron Konveyör Motoru"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 3
+    lead_time_days: 1
+    cost_maint: 500
+    cost_damage: 9500
+
+  - id: "STACKER_LOADER"
+    name: "Stacker (Lehr Loader) Fırın Yükleme Ünitesi"
+    section: "Hot Section"
+    is_hot_section: true
+    workers_needed: 6
+    lead_time_days: 4
+    cost_maint: 2000
+    cost_damage: 24000
+
+  # ----------------------------------------------------------------------------
+  # 2. TAVLAMA FIRINI (LEHR) VE FIRIN İÇİ TAHRİKLER
+  # ----------------------------------------------------------------------------
+  - id: "LEHR_BELT_DRIVE"
+    name: "Tavlama Fırını Hasır Bant Tahrik Motoru"
+    section: "Lehr"
+    is_hot_section: true
+    workers_needed: 8
+    lead_time_days: 7
+    cost_maint: 3500
+    cost_damage: 45000
+
+  - id: "LEHR_BURNER_PUMP_01"
+    name: "Tavlama Fırını Alev Pompası / Brülör 01"
+    section: "Lehr"
+    is_hot_section: true
+    workers_needed: 3
+    lead_time_days: 2
+    cost_maint: 700
+    cost_damage: 7500
+
+  - id: "LEHR_FAN_RECIRC"
+    name: "Fırın İçi Hava Resirkülasyon Fanı"
+    section: "Lehr"
+    is_hot_section: true
+    workers_needed: 4
+    lead_time_days: 3
+    cost_maint: 900
+    cost_damage: 11000
+
+  # ----------------------------------------------------------------------------
+  # 3. SOĞUK BÖLGE: KAPLAMA, SOĞUK KONVEYÖRLER VE MUAYENE
+  # ----------------------------------------------------------------------------
+  - id: "COLD_COAT_PUMP"
+    name: "Soğuk Kaplama Kimyasal Dozaj Pompasi"
+    section: "Cold Section"
+    is_hot_section: false
+    workers_needed: 2
+    lead_time_days: 1
+    cost_maint: 400
+    cost_damage: 2000
+
+  - id: "CONV_COLD_01"
+    name: "Soğuk Kaplama Çıkış Konveyör Motoru 01"
+    section: "Cold Section"
+    is_hot_section: false
+    workers_needed: 3
+    lead_time_days: 1
+    cost_maint: 500
+    cost_damage: 4000
+
+  - id: "CONV_COLD_02"
+    name: "Soğuk Kaplama Çıkış Konveyör Motoru 02"
+    section: "Cold Section"
+    is_hot_section: false
+    workers_needed: 3
+    lead_time_days: 1
+    cost_maint: 500
+    cost_damage: 4000
+
+  - id: "INSPECTION_MCAL"
+    name: "MCAL Döner Tablalı Kalite Muayene Konveyörü"
+    section: "Quality Control"
+    is_hot_section: false
+    workers_needed: 2
+    lead_time_days: 2
+    cost_maint: 800
+    cost_damage: 5000
+
+  - id: "INSPECTION_MULTI_MX4"
+    name: "Multi MX4 Çökmek Muayene Makinesi Konveyörü"
+    section: "Quality Control"
+    is_hot_section: false
+    workers_needed: 2
+    lead_time_days: 2
+    cost_maint: 850
+    cost_damage: 5200
+
+  - id: "CONV_INVERTER"
+    name: "Ters Çevirici Konveyör Motoru ve Pnömatik İtici"
+    section: "Cold Section"
+    is_hot_section: false
+    workers_needed: 2
+    lead_time_days: 1
+    cost_maint: 450
+    cost_damage: 3000
+
+  # ----------------------------------------------------------------------------
+  # 4. YARDIMCI TESİSLER (UTILITIES)
+  # ----------------------------------------------------------------------------
+  - id: "AIR_COMPRESSOR_01"
+    name: "Merkezi Hat Pnömatik Vida Kompresörü"
+    section: "Utilities"
+    is_hot_section: true
+    workers_needed: 4
+    lead_time_days: 10
+    cost_maint: 2500
+    cost_damage: 35000

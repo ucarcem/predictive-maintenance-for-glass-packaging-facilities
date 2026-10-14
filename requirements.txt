@@ -1,0 +1,23 @@
+# --- Veri İşleme ve Matematik ---
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+pyyaml>=6.0
+sqlalchemy>=2.0.0
+
+# --- Derin Öğrenme ve Makine Öğrenmesi ---
+torch>=2.0.0
+scikit-learn>=1.2.0
+
+# --- Optimizasyon ve MILP Çözücü ---
+pulp>=2.7.0
+highspy>=1.5.0
+
+# --- Arayüz ve Görselleştirme ---
+streamlit>=1.25.0
+plotly>=5.15.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# --- Test ve Kalite ---
+pytest>=7.3.0
